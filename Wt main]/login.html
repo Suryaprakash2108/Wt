@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Sign Up</title>
+    <style>
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes floatAnimation {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes glowPulse {
+            0% { box-shadow: 0 8px 20px rgba(0, 255, 136, 0.2); }
+            50% { box-shadow: 0 8px 30px rgba(0, 255, 136, 0.4); }
+            100% { box-shadow: 0 8px 20px rgba(0, 255, 136, 0.2); }
+        }
+
+        @keyframes fadeInScale {
+            0% { 
+                opacity: 0; 
+                transform: scale(0.9) translateY(20px);
+            }
+            100% { 
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(rgba(26, 26, 46, 0.5), rgba(22, 33, 62, 0.5)),
+                        url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=2000') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, 
+                        rgba(0,0,0,0), 
+                        rgba(0,0,0,0.4));
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            padding: 2.5em;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeInScale 0.8s ease-out;
+        }
+
+        .container:hover {
+            animation: glowPulse 2s infinite;
+        }
+
+        h2 {
+            color: #00ff88;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2em;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+
+        label {
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #00ff88;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+        }
+
+        button {
+            width: 100%;
+            background: linear-gradient(45deg, #00ff88, #00b8ff);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #00b8ff, #00ff88);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 255, 136, 0.4);
+        }
+
+        .toggle-button {
+            background: none;
+            border: none;
+            color: #00ff88;
+            cursor: pointer;
+            padding: 10px;
+            text-decoration: none;
+            font-size: 1em;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .toggle-button:hover {
+            color: #00b8ff;
+            background: none;
+            transform: scale(1.05);
+            box-shadow: none;
+        }
+
+        .error {
+            color: #ff4d4d;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            text-align: center;
+            text-shadow: 0 0 5px rgba(255, 77, 77, 0.3);
+        }
+
+        .success {
+            color: #00ff88;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            text-align: center;
+            text-shadow: 0 0 5px rgba(0, 255, 136, 0.3);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #loginForm, #signUpForm {
+            animation: fadeInScale 0.5s ease-out;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 20px;
+                padding: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="loginForm">
+            <h2>Login</h2>
+            <label for="loginUsername">Username:</label>
+            <input type="text" id="loginUsername" placeholder="Enter your username">
+            <label for="loginPassword">Password:</label>
+            <input type="password" id="loginPassword" placeholder="Enter your password">
+            <button onclick="login()">Login</button>
+            <p class="error" id="loginError"></p>
+            <p>Don't have an account? <button class="toggle-button" onclick="showSignUp()">Sign Up</button></p>
+        </div>
+        <div id="signUpForm" class="hidden">
+            <h2>Sign Up</h2>
+            <label for="signupUsername">Username:</label>
+            <input type="text" id="signupUsername" placeholder="Choose a username">
+            <label for="signupPassword">Password:</label>
+            <input type="password" id="signupPassword" placeholder="Create a password">
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" placeholder="Re-enter your password">
+            <button onclick="signUp()">Sign Up</button>
+            <p class="error" id="signUpError"></p>
+            <p>Already have an account? <button class="toggle-button" onclick="showLogin()">Login</button></p>
+        </div>
+        <div id="messageArea"></div>
+    </div>
+    <script>
+        const users = [];
+
+        function showSignUp() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('signUpForm').classList.remove('hidden');
+            clearMessages();
+        }
+
+        function showLogin() {
+            document.getElementById('signUpForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+            clearMessages();
+        }
+
+        function clearMessages() {
+            document.getElementById('loginError').innerText = '';
+            document.getElementById('signUpError').innerText = '';
+            document.getElementById('messageArea').innerText = '';
+        }
+
+        function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            const user = users.find(u => u.username === username);
+            clearMessages();
+
+            if (!user) {
+                document.getElementById('loginError').innerText = 'User not found!';
+                return;
+            }
+
+            if (user.password !== password) {
+                document.getElementById('loginError').innerText = 'Incorrect password!';
+                return;
+            }
+
+            document.getElementById('messageArea').innerText = 'Login successful! Welcome!';
+            document.getElementById('messageArea').className = 'success';
+
+            setTimeout(() => {
+                window.location.href = 'home.html';
+            }, 2000);
+        }
+
+        function signUp() {
+            const username = document.getElementById('signupUsername').value.trim();
+            const password = document.getElementById('signupPassword').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+            clearMessages();
+
+            if (users.find(u => u.username === username)) {
+                document.getElementById('signUpError').innerText = 'Username already exists!';
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                document.getElementById('signUpError').innerText = 'Passwords do not match!';
+                return;
+            }
+
+            users.push({ username, password });
+            document.getElementById('messageArea').innerText = 'Sign Up successful! You can now log in.';
+            document.getElementById('messageArea').className = 'success';
+
+            showLogin();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slam Book - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="nav-profile-container">
+            <!-- Left side: Navigation -->
+            <div class="navigation">
+                <a href="home.html" class="nav-link">Home</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+            </div>
+
+            <!-- Right side: Profile -->
+            <div class="profile-section">
+                <span id="profileUsername">Username</span>
+            </div>
+        </div>
+
+        <h1>Classmates in Slam Book</h1>
+
+        <!-- Container to display classmates -->
+        <div class="slam-book-content" id="slamBookContent">
+            <!-- Classmate entries will be dynamically added here -->
+        </div>
+
+        <!-- Modal for displaying classmate details -->
+        <div id="classmateDetailsModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="modalClose">&times;</span>
+                <img id="detailsProfileImage" alt="Profile Picture">
+                <p id="detailsName"></p>
+                <p id="detailsNickname"></p>
+                <p id="detailsDob"></p>
+                <p id="detailsRollNo"></p>
+                <p id="detailsOccupation"></p>
+                <p id="detailsEmail"></p>
+                <p id="detailsPhone"></p>
+                <p id="detailsHobbies"></p>
+                <p id="detailsFavFood"></p>
+                <p id="detailsQuote"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fetch the logged-in username from localStorage
+        const loggedInUser = localStorage.getItem('loggedInUser') || 'Guest';
+        document.getElementById('profileUsername').textContent = loggedInUser;
+
+        // Fetch Slam Book Data from Local Storage
+        let classmates = JSON.parse(localStorage.getItem('slamBook')) || [];
+
+        // Function to Sort Classmates by Roll Number
+        function sortClassmatesByRollNo() {
+            classmates.sort((a, b) => a.rollNo.localeCompare(b.rollNo));
+        }
+
+        // Function to Display Classmates in Dashboard
+        function displaySlamBook() {
+            const slamBookContent = document.getElementById('slamBookContent');
+            slamBookContent.innerHTML = '';
+
+            sortClassmatesByRollNo();
+
+            classmates.forEach((classmate, index) => {
+                const classmateEntry = document.createElement('div');
+                classmateEntry.classList.add('classmate-entry');
+
+                classmateEntry.innerHTML = `
+                    <div class="classmate-info">
+                        <p><strong>Roll No:</strong> ${classmate.rollNo}</p>
+                        <p><strong>Name:</strong> <a href="#" onclick="showClassmateDetails(${index})">${classmate.name}</a></p>
+                        <p><strong>Nickname:</strong> ${classmate.nickname}</p>
+                        <p><strong>Occupation:</strong> ${classmate.occupation}</p>
+                    </div>
+                    <button class="delete-btn" onclick="deleteClassmate(${index})">Delete Entry</button>
+                `;
+
+                slamBookContent.appendChild(classmateEntry);
+            });
+        }
+
+        // Function to show classmate details in modal
+        function showClassmateDetails(index) {
+            const classmate = classmates[index];
+            const modal = document.getElementById('classmateDetailsModal');
+
+            // Populate the modal with classmate details
+            document.getElementById('detailsProfileImage').src = classmate.profilePhoto;
+            document.getElementById('detailsName').innerHTML = `<strong>Name:</strong> ${classmate.name}`;
+            document.getElementById('detailsNickname').innerHTML = `<strong>Nickname:</strong> ${classmate.nickname}`;
+            document.getElementById('detailsDob').innerHTML = `<strong>Date of Birth:</strong> ${classmate.dob}`;
+            document.getElementById('detailsRollNo').innerHTML = `<strong>Roll No:</strong> ${classmate.rollNo}`;
+            document.getElementById('detailsOccupation').innerHTML = `<strong>Occupation:</strong> ${classmate.occupation}`;
+            document.getElementById('detailsEmail').innerHTML = `<strong>Email:</strong> ${classmate.email}`;
+            document.getElementById('detailsPhone').innerHTML = `<strong>Phone:</strong> ${classmate.phone}`;
+            document.getElementById('detailsHobbies').innerHTML = `<strong>Hobbies:</strong> ${classmate.hobbies}`;
+            document.getElementById('detailsFavFood').innerHTML = `<strong>Favorite Food:</strong> ${classmate.favFood}`;
+            document.getElementById('detailsQuote').innerHTML = `<strong>Favorite Quote:</strong> ${classmate.quote}`;
+
+            // Show the modal with fade-in effect
+            modal.style.display = 'block';
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+            }, 10);
+        }
+
+        // Function to Delete Classmate
+        function deleteClassmate(index) {
+            if (confirm('Are you sure you want to delete this entry from your slam book?')) {
+                classmates.splice(index, 1);
+                localStorage.setItem('slamBook', JSON.stringify(classmates));
+                displaySlamBook();
+            }
+        }
+
+        // Close the modal
+        document.getElementById('modalClose').addEventListener('click', function() {
+            const modal = document.getElementById('classmateDetailsModal');
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('classmateDetailsModal');
+            if (event.target === modal) {
+                modal.style.opacity = '0';
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 300);
+            }
+        });
+
+        // Initial display of classmates when the page loads
+        displaySlamBook();
+    </script>
+</body>
+</html>
